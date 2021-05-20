@@ -24,12 +24,12 @@ namespace TaskPlanner.Controllers
             {
                 IOrderedQueryable<Board> boards = db.Boards
                     .OrderBy(b => b.BoardId);
+                return View(boards.ToList());
             }
-            return View();
         }
 
         public IActionResult Add()
-        {    
+        {
             return View();
         }
 
@@ -43,8 +43,8 @@ namespace TaskPlanner.Controllers
                 Console.WriteLine("Inserting a new blog");
                 db.Add(new Board { Title = title });
                 db.SaveChanges();
+                return RedirectToAction("Index", "Board");
             }
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

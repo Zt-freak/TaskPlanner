@@ -1,8 +1,12 @@
-﻿@{
+﻿@model List<Board>
+@{
     ViewData["Title"] = "Board Index Page";
 }
 
 <div class="">
     <h1 class="">Board Index</h1>
-    Work in progress...
+    @foreach (Board board in Model)
+    {
+        <div>Title of Board: @board.Title</div>
+    }
 </div>
