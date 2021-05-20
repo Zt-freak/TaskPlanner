@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TaskPlanner.Models
 {
-    public class Board
+    public class BoardColumn
     {
-        public int BoardId { get; set; }
+        public int BoardColumnId { get; set; }
         public string Title { get; set; }
-        public List<BoardColumn> BoardColumns { get; } = new List<BoardColumn>();
+        public int BoardId { get; set; }
+        public Board Board { get; set; }
     }
 }

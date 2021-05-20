@@ -8,6 +8,7 @@ namespace TaskPlanner.Models
     {
         public DbSet<Board> Boards { get; set; }
         public DbSet<Task> Tasks { get; set; }
+        public DbSet<BoardColumn> BoardColumns { get; set; } 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bnkho\source\repos\TaskPlannerDb\TaskPlannerDb.mdf;Integrated Security=True;Connect Timeout=30");
     }

@@ -33,6 +33,26 @@ namespace TaskPlanner.Models.Migrations
                     b.ToTable("Boards");
                 });
 
+            modelBuilder.Entity("TaskPlanner.Models.BoardColumn", b =>
+                {
+                    b.Property<int>("BoardColumnId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BoardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BoardColumnId");
+
+                    b.HasIndex("BoardId");
+
+                    b.ToTable("BoardColumns");
+                });
+
             modelBuilder.Entity("TaskPlanner.Models.Task", b =>
                 {
                     b.Property<int>("TaskId")
@@ -40,7 +60,7 @@ namespace TaskPlanner.Models.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BoardId")
+                    b.Property<int>("BoardColumnId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -51,15 +71,15 @@ namespace TaskPlanner.Models.Migrations
 
                     b.HasKey("TaskId");
 
-                    b.HasIndex("BoardId");
+                    b.HasIndex("BoardColumnId");
 
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TaskPlanner.Models.Task", b =>
+            modelBuilder.Entity("TaskPlanner.Models.BoardColumn", b =>
                 {
                     b.HasOne("TaskPlanner.Models.Board", "Board")
-                        .WithMany("Tasks")
+                        .WithMany("BoardColumns")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -67,9 +87,20 @@ namespace TaskPlanner.Models.Migrations
                     b.Navigation("Board");
                 });
 
+            modelBuilder.Entity("TaskPlanner.Models.Task", b =>
+                {
+                    b.HasOne("TaskPlanner.Models.BoardColumn", "BoardColumn")
+                        .WithMany()
+                        .HasForeignKey("BoardColumnId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BoardColumn");
+                });
+
             modelBuilder.Entity("TaskPlanner.Models.Board", b =>
                 {
-                    b.Navigation("Tasks");
+                    b.Navigation("BoardColumns");
                 });
 #pragma warning restore 612, 618
         }
