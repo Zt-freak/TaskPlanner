@@ -28,12 +28,8 @@ namespace TaskPlanner.Controllers
                 return NotFound();
             }*/
 
-            var board = await _context.Boards
-                .FirstOrDefaultAsync(m => m.BoardId == 1);
-
-            _context.Entry(board)
-                .Collection(b => b.BoardColumns)
-                .Load();
+            var board = _context.Boards
+                .Where(m => m.BoardId == 1).Include(b => b.BoardColumns).FirstOrDefault();
 
             if (board == null)
             {
