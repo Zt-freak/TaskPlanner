@@ -9,23 +9,23 @@ using TaskPlanner.Models;
 
 namespace TaskPlanner.Controllers
 {
-    public class BoardsController : Controller
+    public class BoardColumnsController : Controller
     {
         private readonly TaskPlannerContext _context;
 
-        // Add dependency injection later
-        public BoardsController()
+        public BoardColumnsController()
         {
             _context = new TaskPlannerContext();
         }
 
-        // GET: Boards
+        // GET: BoardColumns
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Boards.ToListAsync());
+            var taskPlannerContext = _context.BoardColumns.Include(b => b.Board);
+            return View(await taskPlannerContext.ToListAsync());
         }
 
-        // GET: Boards/Details/5
+        // GET: BoardColumns/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,57 +33,42 @@ namespace TaskPlanner.Controllers
                 return NotFound();
             }
 
-            var board = await _context.Boards
-                .FirstOrDefaultAsync(m => m.BoardId == id);
-            if (board == null)
+            var boardColumn = await _context.BoardColumns
+                .Include(b => b.Board)
+                .FirstOrDefaultAsync(m => m.BoardColumnId == id);
+            if (boardColumn == null)
             {
                 return NotFound();
             }
 
-            return View(board);
+            return View(boardColumn);
         }
 
-        // GET: Boards/BoardView/5
-        public async Task<IActionResult> BoardView(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var board = await _context.Boards
-                .FirstOrDefaultAsync(m => m.BoardId == id);
-            if (board == null)
-            {
-                return NotFound();
-            }
-
-            return View(board);
-        }
-
-        // GET: Boards/Create
+        // GET: BoardColumns/Create
         public IActionResult Create()
         {
+            ViewData["BoardId"] = new SelectList(_context.Boards, "BoardId", "BoardId");
             return View();
         }
 
-        // POST: Boards/Create
+        // POST: BoardColumns/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BoardId,Title")] Board board)
+        public async Task<IActionResult> Create([Bind("BoardColumnId,Title,BoardId")] BoardColumn boardColumn)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(board);
+                _context.Add(boardColumn);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(board);
+            ViewData["BoardId"] = new SelectList(_context.Boards, "BoardId", "BoardId", boardColumn.BoardId);
+            return View(boardColumn);
         }
 
-        // GET: Boards/Edit/5
+        // GET: BoardColumns/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,22 +76,23 @@ namespace TaskPlanner.Controllers
                 return NotFound();
             }
 
-            var board = await _context.Boards.FindAsync(id);
-            if (board == null)
+            var boardColumn = await _context.BoardColumns.FindAsync(id);
+            if (boardColumn == null)
             {
                 return NotFound();
             }
-            return View(board);
+            ViewData["BoardId"] = new SelectList(_context.Boards, "BoardId", "BoardId", boardColumn.BoardId);
+            return View(boardColumn);
         }
 
-        // POST: Boards/Edit/5
+        // POST: BoardColumns/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BoardId,Title")] Board board)
+        public async Task<IActionResult> Edit(int id, [Bind("BoardColumnId,Title,BoardId")] BoardColumn boardColumn)
         {
-            if (id != board.BoardId)
+            if (id != boardColumn.BoardColumnId)
             {
                 return NotFound();
             }
@@ -115,12 +101,12 @@ namespace TaskPlanner.Controllers
             {
                 try
                 {
-                    _context.Update(board);
+                    _context.Update(boardColumn);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BoardExists(board.BoardId))
+                    if (!BoardColumnExists(boardColumn.BoardColumnId))
                     {
                         return NotFound();
                     }
@@ -131,10 +117,11 @@ namespace TaskPlanner.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(board);
+            ViewData["BoardId"] = new SelectList(_context.Boards, "BoardId", "BoardId", boardColumn.BoardId);
+            return View(boardColumn);
         }
 
-        // GET: Boards/Delete/5
+        // GET: BoardColumns/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,30 +129,31 @@ namespace TaskPlanner.Controllers
                 return NotFound();
             }
 
-            var board = await _context.Boards
-                .FirstOrDefaultAsync(m => m.BoardId == id);
-            if (board == null)
+            var boardColumn = await _context.BoardColumns
+                .Include(b => b.Board)
+                .FirstOrDefaultAsync(m => m.BoardColumnId == id);
+            if (boardColumn == null)
             {
                 return NotFound();
             }
 
-            return View(board);
+            return View(boardColumn);
         }
 
-        // POST: Boards/Delete/5
+        // POST: BoardColumns/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var board = await _context.Boards.FindAsync(id);
-            _context.Boards.Remove(board);
+            var boardColumn = await _context.BoardColumns.FindAsync(id);
+            _context.BoardColumns.Remove(boardColumn);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BoardExists(int id)
+        private bool BoardColumnExists(int id)
         {
-            return _context.Boards.Any(e => e.BoardId == id);
+            return _context.BoardColumns.Any(e => e.BoardColumnId == id);
         }
     }
 }
