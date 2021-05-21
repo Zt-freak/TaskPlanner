@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +22,11 @@ namespace TaskPlanner.Controllers
             _context = new TaskPlannerContext();
         }
 
-        [HttpGet("api/board")]
-        public ActionResult<string> GetBoard()
+        //api/board/get?id=1
+        [HttpGet("api/board/get")]
+        public ActionResult<string> GetBoard( int? id )
         {
-            Board board = _context.Boards.Include(b => b.BoardColumns).FirstOrDefault(b => b.BoardId == 1);
+            Board board = _context.Boards.Include(b => b.BoardColumns).FirstOrDefault(b => b.BoardId == id);
 
             if (board == null)
             {
@@ -34,18 +36,65 @@ namespace TaskPlanner.Controllers
             return jsonString;
         }
 
-        /*[HttpGet("api/board")]
-        public ActionResult<string> GetBoardAsync()
-        {​​​​​​​
-            Board board = _context.Boards.Include(b => b.BoardColumns).FirstOrDefault(b => b.BoardId == 1);
+        //api/column/get?id=1
+        [HttpGet("api/column/get")]
+        public ActionResult<string> GetColumn(int? id)
+        {
+            BoardColumn column = _context.BoardColumns.Include(c => c.Tasks).FirstOrDefault(b => b.BoardColumnId == id);
 
-
-            if (board == null)
-            {​​​​​​​
+            if (column == null)
+            {
                 return NotFound();
-            }​​​​​​​
-            var jsonString = JsonConvert.SerializeObject(board);
+            }
+            var jsonString = JsonConvert.SerializeObject(column);
             return jsonString;
-        }​​​​​​​*/
+        }
+
+        //api/task/get?id=1
+        [HttpGet("api/task/get")]
+        public ActionResult<string> GetTask(int? id)
+        {
+            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+            var jsonString = JsonConvert.SerializeObject(task);
+            return jsonString;
+        }
+
+        //api/task/move
+        [HttpPost("api/task/move")]
+        public ActionResult<string> MoveTask(int? taskId, int? columnId)
+        {
+            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+            BoardColumn column = _context.BoardColumns.FirstOrDefault(b => b.BoardColumnId == columnId);
+            if (task == null)
+            {
+                return "task not found";
+                //return NotFound();
+            }
+            if (column == null)
+            {
+                return "column not found";
+                //return NotFound();
+            }
+
+            task.BoardColumnId = column.BoardColumnId;
+
+            try
+            {
+                _context.Update(task);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            var jsonString = JsonConvert.SerializeObject(task);
+            return jsonString;
+        }
     }
 }
