@@ -11,6 +11,6 @@ namespace TaskPlanner.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public int BoardColumnId { get; set; }
-        public BoardColumn BoardColumn { get; set; }
+        //public BoardColumn BoardColumn { get; set; }
     }
 }

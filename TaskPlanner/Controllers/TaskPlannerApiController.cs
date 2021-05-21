@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TaskPlanner.Models;
 
 namespace TaskPlanner.Controllers
@@ -21,25 +22,30 @@ namespace TaskPlanner.Controllers
         }
 
         [HttpGet("api/board")]
-        public async Task<ActionResult<IEnumerable<Board>>> GetBoardAsync(/*int? id*/)
+        public ActionResult<string> GetBoard()
         {
-            /*if (id == null)
-            {
-                return NotFound();
-            }*/
-
-            var board = _context.Boards
-                .Where(m => m.BoardId == 1).Include(b => b.BoardColumns).FirstOrDefault();
+            Board board = _context.Boards.Include(b => b.BoardColumns).FirstOrDefault(b => b.BoardId == 1);
 
             if (board == null)
             {
                 return NotFound();
             }
-
-            return new[]
-            {
-                board
-            };
+            var jsonString = JsonConvert.SerializeObject(board);
+            return jsonString;
         }
+
+        /*[HttpGet("api/board")]
+        public ActionResult<string> GetBoardAsync()
+        {​​​​​​​
+            Board board = _context.Boards.Include(b => b.BoardColumns).FirstOrDefault(b => b.BoardId == 1);
+
+
+            if (board == null)
+            {​​​​​​​
+                return NotFound();
+            }​​​​​​​
+            var jsonString = JsonConvert.SerializeObject(board);
+            return jsonString;
+        }​​​​​​​*/
     }
 }

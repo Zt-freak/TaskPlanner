@@ -21,7 +21,7 @@ namespace TaskPlanner.Controllers
         // GET: BoardColumns
         public async Task<IActionResult> Index()
         {
-            var taskPlannerContext = _context.BoardColumns.Include(b => b.Board);
+            var taskPlannerContext = _context.BoardColumns;
             return View(await taskPlannerContext.ToListAsync());
         }
 
@@ -34,7 +34,6 @@ namespace TaskPlanner.Controllers
             }
 
             var boardColumn = await _context.BoardColumns
-                .Include(b => b.Board)
                 .FirstOrDefaultAsync(m => m.BoardColumnId == id);
             if (boardColumn == null)
             {
@@ -130,7 +129,6 @@ namespace TaskPlanner.Controllers
             }
 
             var boardColumn = await _context.BoardColumns
-                .Include(b => b.Board)
                 .FirstOrDefaultAsync(m => m.BoardColumnId == id);
             if (boardColumn == null)
             {
