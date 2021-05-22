@@ -66,8 +66,10 @@ namespace TaskPlanner.Controllers
 
         //api/task/move
         [HttpPost("api/task/move")]
-        public ActionResult<string> MoveTask(int? taskId, int? columnId)
+        public ActionResult<string> MoveTask(string stringData)
         {
+            int taskId = 1;
+            int columnId = 1;
             Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == taskId);
             BoardColumn column = _context.BoardColumns.FirstOrDefault(b => b.BoardColumnId == columnId);
             if (task == null)
