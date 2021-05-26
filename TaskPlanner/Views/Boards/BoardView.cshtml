@@ -1,14 +1,11 @@
-﻿@using System.Web
-@model TaskPlanner.Models.Board
+﻿@model TaskPlanner.Models.Board
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <div id="root"></div>
+    <div id="root" data-id="@Model.BoardId"></div>
 </div>
 
 @section Scripts

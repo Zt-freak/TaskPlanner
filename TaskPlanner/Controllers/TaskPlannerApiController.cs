@@ -36,6 +36,39 @@ namespace TaskPlanner.Controllers
             return jsonString;
         }
 
+        //api/board/edit
+        [HttpPost("api/board/edit")]
+        public ActionResult<string> EditBoard()
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            Board board = _context.Boards.FirstOrDefault(t => t.BoardId == jsonData.BoardId);
+            if (board == null)
+            {
+                return NotFound();
+            }
+
+            board.Title = jsonData.Title;
+
+            try
+            {
+                _context.Update(board);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            var jsonString = JsonConvert.SerializeObject(board);
+            return jsonString;
+        }
+
         //api/column/get?id=1
         [HttpGet("api/column/get")]
         public ActionResult<string> GetColumn(int? id)
@@ -46,6 +79,104 @@ namespace TaskPlanner.Controllers
             {
                 return NotFound();
             }
+            var jsonString = JsonConvert.SerializeObject(column);
+            return jsonString;
+        }
+
+        //api/column/edit
+        [HttpPost("api/column/edit")]
+        public ActionResult<string> EditColumn()
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            BoardColumn column = _context.BoardColumns.FirstOrDefault(t => t.BoardColumnId == jsonData.BoardColumnId);
+            if (column == null)
+            {
+                return NotFound();
+            }
+
+            column.Title = jsonData.Title;
+
+            try
+            {
+                _context.Update(column);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            var jsonString = JsonConvert.SerializeObject(column);
+            return jsonString;
+        }
+
+        //api/column/delete
+        [HttpPost("api/column/delete")]
+        public ActionResult<string> DeleteColumn()
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            BoardColumn column = _context.BoardColumns.FirstOrDefault(t => t.BoardColumnId == jsonData.BoardColumnId);
+            if (column == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Remove(column);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            //var jsonString = JsonConvert.SerializeObject(column);
+            return "{}";
+        }
+
+        //api/column/add
+        [HttpPost("api/column/add")]
+        public ActionResult<string> AddColumn()
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            BoardColumn column = new BoardColumn();
+            if (column == null)
+            {
+                return NotFound();
+            }
+
+            column.Title = jsonData.Title;
+            column.BoardId = jsonData.BoardId;
+
+            try
+            {
+                _context.Add(column);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
             var jsonString = JsonConvert.SerializeObject(column);
             return jsonString;
         }
@@ -64,23 +195,62 @@ namespace TaskPlanner.Controllers
             return jsonString;
         }
 
-        //api/task/move
-        [HttpPost("api/task/move")]
-        public ActionResult<string> MoveTask(string stringData)
+        //api/task/add
+        [HttpPost("api/task/add")]
+        public ActionResult<string> AddTask()
         {
-            int taskId = 1;
-            int columnId = 1;
-            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == taskId);
-            BoardColumn column = _context.BoardColumns.FirstOrDefault(b => b.BoardColumnId == columnId);
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            Models.Task task = new Models.Task();
             if (task == null)
             {
-                return "task not found";
-                //return NotFound();
+                return NotFound();
+            }
+
+            task.Title = jsonData.Title;
+            task.Content = jsonData.Content;
+            task.BoardColumnId = jsonData.BoardColumnId;
+
+            try
+            {
+                _context.Add(task);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            var jsonString = JsonConvert.SerializeObject(task);
+            return jsonString;
+        }
+
+
+        //api/task/move
+        [HttpPost("api/task/move")]
+        public ActionResult<string> MoveTask(/*string task_id, string column_id*/)
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == jsonData.TaskId);
+            BoardColumn column = _context.BoardColumns.FirstOrDefault(b => b.BoardColumnId == jsonData.BoardColumnId);
+            if (task == null)
+            {
+                return NotFound();
             }
             if (column == null)
             {
-                return "column not found";
-                //return NotFound();
+                return NotFound();
             }
 
             task.BoardColumnId = column.BoardColumnId;
@@ -98,5 +268,14 @@ namespace TaskPlanner.Controllers
             var jsonString = JsonConvert.SerializeObject(task);
             return jsonString;
         }
+    }
+
+    public class RequestData
+    {
+        public int BoardId { get; set; }
+        public int BoardColumnId { get; set; }
+        public int TaskId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
     }
 }
