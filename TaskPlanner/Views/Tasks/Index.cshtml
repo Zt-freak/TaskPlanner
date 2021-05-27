@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TaskPlanner.Models.Board>
+﻿@model IEnumerable<TaskPlanner.Models.Task>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,6 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -25,10 +28,12 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.BoardId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BoardId">Details</a> |
-                <a asp-action="BoardView" asp-route-id="@item.BoardId">Board View</a> |
-                <a asp-action="Delete" asp-route-id="@item.BoardId">Delete</a>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TaskId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TaskId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TaskId">Delete</a>
             </td>
         </tr>
 }

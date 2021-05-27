@@ -1,8 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Scripts\config\webpack.config.js" />
+    <Content Include="Scripts\dist\index.js" />
+    <Content Include="Scripts\dist\index.js.LICENSE.txt" />
+    <Content Include="Scripts\src\index.js" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />

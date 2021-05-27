@@ -1,0 +1,14 @@
+﻿@model TaskPlanner.Models.Board
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <div id="root" data-id="@Model.BoardId"></div>
+</div>
+
+@section Scripts
+{
+    <script src="@Url.Content("~/dist/index.js")"></script>
+}

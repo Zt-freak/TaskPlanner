@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskPlanner.Models;
 
 namespace TaskPlanner.Models.Migrations
 {
     [DbContext(typeof(TaskPlannerContext))]
-    partial class TaskPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20210521095053_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,20 +80,24 @@ namespace TaskPlanner.Models.Migrations
 
             modelBuilder.Entity("TaskPlanner.Models.BoardColumn", b =>
                 {
-                    b.HasOne("TaskPlanner.Models.Board", null)
+                    b.HasOne("TaskPlanner.Models.Board", "Board")
                         .WithMany("BoardColumns")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Board");
                 });
 
             modelBuilder.Entity("TaskPlanner.Models.Task", b =>
                 {
-                    b.HasOne("TaskPlanner.Models.BoardColumn", null)
+                    b.HasOne("TaskPlanner.Models.BoardColumn", "BoardColumn")
                         .WithMany("Tasks")
                         .HasForeignKey("BoardColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BoardColumn");
                 });
 
             modelBuilder.Entity("TaskPlanner.Models.Board", b =>
