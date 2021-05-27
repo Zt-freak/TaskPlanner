@@ -24,7 +24,7 @@ namespace TaskPlanner.Controllers
 
         //api/board/get?id=1
         [HttpGet("api/board/get")]
-        public ActionResult<string> GetBoard( int? id )
+        public ActionResult<string> GetBoard(int? id)
         {
             Board board = _context.Boards.Include(b => b.BoardColumns).FirstOrDefault(b => b.BoardId == id);
 
@@ -195,6 +195,71 @@ namespace TaskPlanner.Controllers
             return jsonString;
         }
 
+        //api/task/edit
+        [HttpPost("api/task/edit")]
+        public ActionResult<string> EditTask()
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == jsonData.TaskId);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            task.Title = jsonData.Title;
+            task.Content = jsonData.Content;
+
+            try
+            {
+                _context.Update(task);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            var jsonString = JsonConvert.SerializeObject(task);
+            return jsonString;
+        }
+
+        //api/task/delete
+        [HttpPost("api/task/delete")]
+        public ActionResult<string> DeleteTask()
+        {
+            var output = "";
+            using (StreamReader reader = new StreamReader(Request.Body))
+            {
+                output = reader.ReadToEnd();
+            }
+            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
+
+            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == jsonData.TaskId);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Remove(task);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            //var jsonString = JsonConvert.SerializeObject(column);
+            return "{}";
+        }
+
         //api/task/add
         [HttpPost("api/task/add")]
         public ActionResult<string> AddTask()
@@ -219,45 +284,6 @@ namespace TaskPlanner.Controllers
             try
             {
                 _context.Add(task);
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            var jsonString = JsonConvert.SerializeObject(task);
-            return jsonString;
-        }
-
-
-        //api/task/move
-        [HttpPost("api/task/move")]
-        public ActionResult<string> MoveTask(/*string task_id, string column_id*/)
-        {
-            var output = "";
-            using (StreamReader reader = new StreamReader(Request.Body))
-            {
-                output = reader.ReadToEnd();
-            }
-            RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
-
-            Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == jsonData.TaskId);
-            BoardColumn column = _context.BoardColumns.FirstOrDefault(b => b.BoardColumnId == jsonData.BoardColumnId);
-            if (task == null)
-            {
-                return NotFound();
-            }
-            if (column == null)
-            {
-                return NotFound();
-            }
-
-            task.BoardColumnId = column.BoardColumnId;
-
-            try
-            {
-                _context.Update(task);
                 _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)

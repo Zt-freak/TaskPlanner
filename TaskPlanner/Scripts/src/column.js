@@ -13,6 +13,7 @@ class Column extends React.Component {
         this.titleBlur = this.titleBlur.bind(this);
         this.addTask = this.addTask.bind(this);
         this.delete = this.delete.bind(this);
+        this.handleTaskUnmount = this.handleTaskUnmount.bind(this);
     }
 
     async componentDidMount() {
@@ -73,6 +74,17 @@ class Column extends React.Component {
         }));
     }
 
+    handleTaskUnmount(taskId) {
+        const tempTasks = [...this.state.tasks];
+        for (let i = 0; i < tempTasks.length; i++) {
+            if (tempTasks[i].TaskId == taskId) {
+                tempTasks.splice(i, 1);
+            }
+        }
+
+        this.setState({ tasks: tempTasks });
+    }
+
     render() {
         return <div className="column">
             <div className="column__options">
@@ -82,7 +94,7 @@ class Column extends React.Component {
             <div className="column__tasks" >
                 {
                    this.state.tasks.map((item) =>
-                       (<Task title={item.Title} content={item.Content} taskId={item.TaskId} />)
+                       (<Task title={item.Title} content={item.Content} taskId={item.TaskId} unmountMe={this.handleTaskUnmount}/>)
                    )
                 }
                 <div className="task--add" onClick={this.addTask}></div>
