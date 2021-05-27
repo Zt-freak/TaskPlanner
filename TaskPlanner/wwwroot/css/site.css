@@ -131,7 +131,7 @@ html, body {
 
 .column__tasks {
     overflow-y: scroll;
-    height: calc(100% - 85px);
+    height: calc(100% - 60px);
     width: calc(100% - 10px);
     padding: 10px;
     padding-top: 0;
@@ -146,6 +146,9 @@ html, body {
     background: #FFFFFF;
     border-radius: 2px;
     box-shadow: 0px 1px 2px rgba(0,0,0,0.5);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .task--add {
@@ -164,10 +167,14 @@ html, body {
 
 .task__title {
     font-weight: 400;
-    padding: 10px;
+    padding: 0;
     font-size: 1.2rem;
+    border: none;
 }
 
 .task__content {
-    padding: 10px;
+    border:none;
+    padding: 0;
+    height: 100px;
+    margin-bottom: 10px;
 }

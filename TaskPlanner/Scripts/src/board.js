@@ -14,6 +14,7 @@ class Board extends React.Component {
         this.titleBlur = this.titleBlur.bind(this);
         this.addColumn = this.addColumn.bind(this);
         this.handleColumnUnmount = this.handleColumnUnmount.bind(this);
+        this.transferTask = this.transferTask.bind(this);
     }
 
     async componentDidMount() {
@@ -72,6 +73,17 @@ class Board extends React.Component {
         this.setState({ columns: tempColumns });
     }
 
+    transferTask(task, moveColummId) {
+        const tempColumns = [...this.state.columns]
+        for (let i = 0; i < tempColumns.length; i++) {
+            if (tempColumns[i].BoardColumnId == moveColummId) {
+                tempColumns[i].Tasks.push(task);
+            }
+        }
+
+        this.setState({ columns: tempColumns });
+    }
+
     render() {
         return <div className="board">
             <div className="board__options">
@@ -80,7 +92,7 @@ class Board extends React.Component {
             <div className="board__columns">
                 {
                     this.state.columns.map((item) =>
-                        (<Column title={item.Title} columnId={item.BoardColumnId} unmountMe={this.handleColumnUnmount}/>)
+                        (<Column title={item.Title} columnId={item.BoardColumnId} key={'column' + item.BoardColumnId} unmountMe={this.handleColumnUnmount} transferTask={this.transferTask} Tasks={item.Tasks} columns={this.state.columns}/>)
                     )
                 }
                 <div className="column--add" onClick={this.addColumn}></div>

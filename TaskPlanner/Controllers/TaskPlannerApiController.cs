@@ -207,13 +207,24 @@ namespace TaskPlanner.Controllers
             RequestData jsonData = JsonConvert.DeserializeObject<RequestData>(output);
 
             Models.Task task = _context.Tasks.FirstOrDefault(t => t.TaskId == jsonData.TaskId);
+            BoardColumn column = _context.BoardColumns.FirstOrDefault(t => t.BoardColumnId == jsonData.BoardColumnId);
             if (task == null)
             {
                 return NotFound();
             }
+            if (column != null)
+            {
+                task.BoardColumnId = column.BoardColumnId;
+            }
 
-            task.Title = jsonData.Title;
-            task.Content = jsonData.Content;
+            if (!String.IsNullOrWhiteSpace(jsonData.Title))
+            {
+                task.Title = jsonData.Title;
+            }
+            if (!String.IsNullOrWhiteSpace(jsonData.Content))
+            {
+                task.Content = jsonData.Content;
+            }
 
             try
             {

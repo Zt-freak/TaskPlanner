@@ -9,6 +9,7 @@ class Column extends React.Component {
             tasks: []
         };
 
+        this.updateTasks = this.updateTasks.bind(this);
         this.titleChange = this.titleChange.bind(this);
         this.titleBlur = this.titleBlur.bind(this);
         this.addTask = this.addTask.bind(this);
@@ -16,13 +17,17 @@ class Column extends React.Component {
         this.handleTaskUnmount = this.handleTaskUnmount.bind(this);
     }
 
-    async componentDidMount() {
+    async updateTasks() {
         const response = await fetch('/api/column/get?id=' + this.props.columnId);
         const json = await response.json();
         this.setState({
             title: json.Title,
             tasks: json.Tasks
         });
+    }
+
+    async componentDidMount() {
+        this.updateTasks();
     }
 
     titleChange(event) {
@@ -64,7 +69,8 @@ class Column extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 boardColumnId: this.props.columnId,
-                Title: 'New Task'
+                Title: 'New Task',
+                Content: 'Enter your content here'
             })
         };
         const response = await fetch('/api/task/add', requestOptions);
@@ -74,15 +80,25 @@ class Column extends React.Component {
         }));
     }
 
-    handleTaskUnmount(taskId) {
+    handleTaskUnmount(taskId, moveColummId) {
         const tempTasks = [...this.state.tasks];
+        let taskToBeRemoved = {};
         for (let i = 0; i < tempTasks.length; i++) {
             if (tempTasks[i].TaskId == taskId) {
+                taskToBeRemoved = tempTasks[i];
                 tempTasks.splice(i, 1);
             }
         }
-
+        if (moveColummId !== null && moveColummId !== undefined) {
+            this.props.transferTask(taskToBeRemoved, moveColummId)
+        }
         this.setState({ tasks: tempTasks });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.Tasks.length > 0) {
+            this.updateTasks();
+        }
     }
 
     render() {
@@ -91,10 +107,10 @@ class Column extends React.Component {
                 <input className="column__title" type="text" value={this.state.title} onChange={this.titleChange} onBlur={this.titleBlur} />
                 <button onClick={this.delete} >Delete</button>
             </div>
-            <div className="column__tasks" >
+            <div className="column__tasks">
                 {
                    this.state.tasks.map((item) =>
-                       (<Task title={item.Title} content={item.Content} taskId={item.TaskId} unmountMe={this.handleTaskUnmount}/>)
+                       (<Task columnId={this.props.columnId} title={item.Title} content={item.Content} taskId={item.TaskId} key={'task' + item.TaskId} unmountMe={this.handleTaskUnmount} columns={this.props.columns}/>)
                    )
                 }
                 <div className="task--add" onClick={this.addTask}></div>
