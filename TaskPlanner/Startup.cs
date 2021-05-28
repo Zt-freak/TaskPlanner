@@ -30,6 +30,9 @@ namespace TaskPlanner
             {
                 options.AllowSynchronousIO = true;
             });
+            services.AddDbContext<TaskPlannerContext>(
+                options => options.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bnkho\source\repos\TaskPlannerDb\TaskPlannerDb.mdf;Integrated Security=True;Connect Timeout=30")
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

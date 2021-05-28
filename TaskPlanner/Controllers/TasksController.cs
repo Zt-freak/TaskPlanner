@@ -13,9 +13,9 @@ namespace TaskPlanner.Controllers
     {
         private readonly TaskPlannerContext _context;
 
-        public TasksController()
+        public TasksController(TaskPlannerContext context)
         {
-            _context = new TaskPlannerContext();
+            _context = context;
         }
 
         // GET: Tasks

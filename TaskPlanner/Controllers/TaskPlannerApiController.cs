@@ -16,10 +16,9 @@ namespace TaskPlanner.Controllers
     {
         private readonly TaskPlannerContext _context;
 
-        // Add dependency injection later
-        public TaskPlannerApiController()
+        public TaskPlannerApiController(TaskPlannerContext context)
         {
-            _context = new TaskPlannerContext();
+            _context = context;
         }
 
         //api/board/get?id=1
