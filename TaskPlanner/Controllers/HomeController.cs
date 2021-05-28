@@ -12,30 +12,22 @@ namespace TaskPlanner.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly TaskPlannerContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, TaskPlannerContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            using (var db = new TaskPlannerContext())
+            using (var db = _context)
             {
                 IOrderedQueryable<Board> boards = db.Boards
                     .OrderBy(b => b.BoardId);
             }
             return View();
-        }
-
-        public IActionResult Test()
-        {
-            using (var db = new TaskPlannerContext())
-            {
-                IOrderedQueryable<Board> boards = db.Boards
-                    .OrderBy(b => b.BoardId);
-            }
-                return View();
         }
 
         public IActionResult Privacy()

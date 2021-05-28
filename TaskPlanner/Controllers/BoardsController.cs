@@ -15,9 +15,9 @@ namespace TaskPlanner.Controllers
         private readonly TaskPlannerContext _context;
 
         // Add dependency injection later
-        public BoardsController()
+        public BoardsController(TaskPlannerContext context)
         {
-            _context = new TaskPlannerContext();
+            _context = context;
         }
 
         // GET: Boards
