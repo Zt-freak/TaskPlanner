@@ -9,7 +9,23 @@ namespace TaskPlanner.Models
         public DbSet<Board> Boards { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<BoardColumn> BoardColumns { get; set; } 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bnkho\source\repos\TaskPlannerDb\TaskPlannerDb.mdf;Integrated Security=True;Connect Timeout=30");
+
+        public TaskPlannerContext(DbContextOptions<TaskPlannerContext> options)
+        : base(options)
+        {
+        }
+
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BoardColumn>()
+                .HasOne<Board>(bc => bc.Board)
+                .WithMany(b => b.BoardColumns)
+                .HasForeignKey(bc => bc.BoardColumnId);
+
+            modelBuilder.Entity<Task>()
+                .HasOne<BoardColumn>(t => t.BoardColumn)
+                .WithMany(bc => bc.Tasks)
+                .HasForeignKey(t => .TaskId);
+        }*/
     }
 }

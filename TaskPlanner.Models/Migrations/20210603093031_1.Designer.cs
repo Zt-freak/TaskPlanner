@@ -9,8 +9,8 @@ using TaskPlanner.Models;
 namespace TaskPlanner.Models.Migrations
 {
     [DbContext(typeof(TaskPlannerContext))]
-    [Migration("20210521110607_TryToFix1")]
-    partial class TryToFix1
+    [Migration("20210603093031_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
