@@ -9,8 +9,8 @@ using TaskPlanner.Models;
 namespace TaskPlanner.Models.Migrations
 {
     [DbContext(typeof(TaskPlannerContext))]
-    [Migration("20210520205213_TaskUpdate")]
-    partial class TaskUpdate
+    [Migration("20210603093031_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,24 +80,20 @@ namespace TaskPlanner.Models.Migrations
 
             modelBuilder.Entity("TaskPlanner.Models.BoardColumn", b =>
                 {
-                    b.HasOne("TaskPlanner.Models.Board", "Board")
+                    b.HasOne("TaskPlanner.Models.Board", null)
                         .WithMany("BoardColumns")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Board");
                 });
 
             modelBuilder.Entity("TaskPlanner.Models.Task", b =>
                 {
-                    b.HasOne("TaskPlanner.Models.BoardColumn", "BoardColumn")
+                    b.HasOne("TaskPlanner.Models.BoardColumn", null)
                         .WithMany("Tasks")
                         .HasForeignKey("BoardColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("BoardColumn");
                 });
 
             modelBuilder.Entity("TaskPlanner.Models.Board", b =>

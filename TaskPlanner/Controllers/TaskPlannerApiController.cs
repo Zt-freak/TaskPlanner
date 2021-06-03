@@ -31,7 +31,12 @@ namespace TaskPlanner.Controllers
             {
                 return NotFound();
             }
-            var jsonString = JsonConvert.SerializeObject(board);
+            var jsonString = JsonConvert.SerializeObject(board,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -64,7 +69,12 @@ namespace TaskPlanner.Controllers
                 throw;
             }
 
-            var jsonString = JsonConvert.SerializeObject(board);
+            var jsonString = JsonConvert.SerializeObject(board,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -78,7 +88,12 @@ namespace TaskPlanner.Controllers
             {
                 return NotFound();
             }
-            var jsonString = JsonConvert.SerializeObject(column);
+            var jsonString = JsonConvert.SerializeObject(column,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -111,7 +126,12 @@ namespace TaskPlanner.Controllers
                 throw;
             }
 
-            var jsonString = JsonConvert.SerializeObject(column);
+            var jsonString = JsonConvert.SerializeObject(column,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -176,7 +196,12 @@ namespace TaskPlanner.Controllers
                 throw;
             }
 
-            var jsonString = JsonConvert.SerializeObject(column);
+            var jsonString = JsonConvert.SerializeObject(column,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -190,7 +215,12 @@ namespace TaskPlanner.Controllers
             {
                 return NotFound();
             }
-            var jsonString = JsonConvert.SerializeObject(task);
+            var jsonString = JsonConvert.SerializeObject(task,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -235,7 +265,12 @@ namespace TaskPlanner.Controllers
                 throw;
             }
 
-            var jsonString = JsonConvert.SerializeObject(task);
+            var jsonString = JsonConvert.SerializeObject(task,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
 
@@ -301,7 +336,12 @@ namespace TaskPlanner.Controllers
                 throw;
             }
 
-            var jsonString = JsonConvert.SerializeObject(task);
+            var jsonString = JsonConvert.SerializeObject(task,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }
+            );
             return jsonString;
         }
     }

@@ -2,7 +2,7 @@
 
 namespace TaskPlanner.Models.Migrations
 {
-    public partial class TaskUpdate : Migration
+    public partial class _2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
