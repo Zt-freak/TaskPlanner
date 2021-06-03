@@ -15,17 +15,17 @@ namespace TaskPlanner.Models
         {
         }
 
-        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BoardColumn>()
                 .HasOne<Board>(bc => bc.Board)
                 .WithMany(b => b.BoardColumns)
-                .HasForeignKey(bc => bc.BoardColumnId);
+                .HasForeignKey(bc => bc.BoardId);
 
             modelBuilder.Entity<Task>()
                 .HasOne<BoardColumn>(t => t.BoardColumn)
                 .WithMany(bc => bc.Tasks)
-                .HasForeignKey(t => .TaskId);
-        }*/
+                .HasForeignKey(t => t.BoardColumnId);
+        }
     }
 }
